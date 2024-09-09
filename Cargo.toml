@@ -16,6 +16,10 @@ color-eyre = "0.6"
 eyre = "0.6"
 which = "6.0"
 
+[dependencies.clap]
+version = "4.5"
+features = ["color", "help", "std", "suggestions", "usage", "derive"]
+
 [profile.release]
 opt-level     = "s"
 codegen-units = 1
