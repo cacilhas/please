@@ -1,0 +1,28 @@
+[package]
+name        = "please-install"
+version     = "0.1.0"
+edition     = "2021"
+authors     = ["Rodrigo “Montegasppα” Cacilhας <montegasppa@cacilhas.info>"]
+description = "A unified interface package manager for many OSes"
+license     = "BSD-3-Clause"
+homepage    = "https://github.com/cacilhas/please"
+repository  = "https://github.com/cacilhas/please"
+readme      = "README.md"
+categories  = ["command-line-utilities"]
+keywords    = ["cli", "package", "management"]
+
+[dependencies]
+which = "6.0"
+
+[profile.release]
+opt-level     = "s"
+codegen-units = 1
+panic = "abort"
+debug = false
+lto   = true
+rpath = false
+strip = true
+
+[[bin]]
+name = "please"
+path = "src/bin/please.rs"
