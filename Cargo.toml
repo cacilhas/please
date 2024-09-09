@@ -12,6 +12,8 @@ categories  = ["command-line-utilities"]
 keywords    = ["cli", "package", "management"]
 
 [dependencies]
+color-eyre = "0.6"
+eyre = "0.6"
 which = "6.0"
 
 [profile.release]
