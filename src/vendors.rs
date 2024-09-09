@@ -48,7 +48,7 @@ impl Vendor {
     pub fn new() -> Result<Self> {
         let vendors = get_vendors();
         for vendor in vendors.iter() {
-            let vendor_data: &VendorData = vendor.into();
+            let vendor_data: VendorData = (*vendor).into();
             if let Ok(_) = which::which(vendor_data.1[0]) {
                 return Ok(*vendor)
             }
@@ -59,8 +59,8 @@ impl Vendor {
         ))
     }
 
-    pub fn execute(&self, command: PlsCommand, args: &str, yes: bool, dry_run: bool) -> Result<i32> {
-        let vendor_data: &VendorData = self.into();
+    pub fn execute(self, command: PlsCommand, args: &str, yes: bool, dry_run: bool) -> Result<i32> {
+        let vendor_data: VendorData = self.into();
         let command = command.format(vendor_data, args, yes);
 
         if command.is_empty() {
@@ -83,7 +83,7 @@ impl Vendor {
 }
 
 impl PlsCommand {
-    fn format(&self, vendor: &VendorData, args: &str, yes: bool) -> String {
+    fn format(self, vendor: VendorData, args: &str, yes: bool) -> String {
         match self {
             PlsCommand::Install => vendor.1[2].to_owned(),
             PlsCommand::Remove => vendor.1[3].to_owned(),
@@ -441,17 +441,6 @@ impl From<Vendor> for VendorData {
         for vendor in VENDORS.iter() {
             if vendor.0 == value {
                 return *vendor;
-            }
-        }
-        panic!("unreachable code reached for vendor {:?}", value);
-    }
-}
-
-impl From<&Vendor> for &VendorData {
-    fn from(value: &Vendor) -> Self {
-        for vendor in VENDORS.iter() {
-            if vendor.0 == *value {
-                return vendor;
             }
         }
         panic!("unreachable code reached for vendor {:?}", value);
