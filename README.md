@@ -15,7 +15,7 @@ First install `rustup` using your system package manager, and then run:
 
 ```sh
 rustup toolchain install nightly-2024-09-01
-cargo +nightly install please-install
+cargo +nightly-2024-09-01 install please-install
 ```
 
 ## Usage
