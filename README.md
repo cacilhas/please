@@ -18,6 +18,9 @@ rustup toolchain install nightly-2024-09-01
 cargo +nightly-2024-09-01 install please-install
 ```
 
+**Note** that, in order to use `cargo` and `please` on Posix systems, you need
+to put `$CARGO_HOME/bin` (usually `$HOME/.cargo/bin`) into `PATH`.
+
 ## Usage
 
 ```
