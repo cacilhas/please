@@ -1,34 +1,60 @@
 use eyre::{eyre, Result};
+use strum::{EnumIter, IntoEnumIterator};
 use std::{ffi::OsString, process::Command};
 
 
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, EnumIter, PartialEq)]
 pub enum Vendor {
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
     Apk,
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
     Apt,
+    #[cfg(target_os = "macos")]
     Brew,
     Cards,
+    #[cfg(target_os = "windows")]
     Choco,
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
     Dnf,
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
     Emerge,
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
     Eopkg,
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
     Flatpak,
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
     Guix,
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
     NixEnv,
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
     Opkg,
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
     Pacman,
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
     Pkg,
+    #[cfg(target_os = "haiku")]
     Pkgman,
+    #[cfg(target_os = "macos")]
     Ports,
+    #[cfg(target_os = "windows")]
     Scoop,
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
     Slackpkg,
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
     Snap,
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
     Urpm,
+    #[cfg(target_os = "android")]
     Termux,
+    #[cfg(target_os = "windows")]
     Winget,
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
     Xbps,
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
     Yay,
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
     Yum,
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
     Zypper,
 }
 
@@ -46,16 +72,15 @@ pub enum PlsCommand {
 
 impl Vendor {
     pub fn new() -> Result<Self> {
-        let vendors = get_vendors();
-        for vendor in vendors.iter() {
-            let vendor_data: VendorData = (*vendor).into();
+        for vendor in Vendor::iter() {
+            let vendor_data: VendorData = vendor.into();
             if let Ok(_) = which::which(vendor_data.1[0]) {
-                return Ok(*vendor)
+                return Ok(vendor)
             }
         }
         Err(eyre!(
             "no vendor installed, candidates are: {}",
-            vendors.iter().map(|vendor| format!("{:?}", vendor)).collect::<Vec<String>>().join(", "),
+            Vendor::iter().map(|vendor| format!("{:?}", vendor)).collect::<Vec<String>>().join(", "),
         ))
     }
 
@@ -102,9 +127,9 @@ impl PlsCommand {
 impl From<OsString> for Vendor {
     fn from(value: OsString) -> Self {
         let value = value.to_string_lossy().to_lowercase();
-        for vendor in get_vendors().iter() {
+        for vendor in Vendor::iter() {
             if format!("{:?}", vendor).to_lowercase() == value {
-                return *vendor;
+                return vendor;
             }
         }
         panic!("invalid vendor name {}", value);
@@ -114,25 +139,11 @@ impl From<OsString> for Vendor {
 //----------------------------------------------------------------------------//
 use Vendor::*;
 
-fn get_vendors() -> Vec<Vendor> {
-    vec![
-        #[cfg(target_os = "android")]
-        Termux,
-        #[cfg(target_os = "haiku")]
-        Pkgman,
-        #[cfg(target_os = "linux")] /* TODO: filter by distro */
-        Apt, Dnf, Yum, Yay, Pacman, Apk, Emerge, Slackpkg, Zypper, NixEnv, Xbps, Cards, Urpm, Eopkg, Flatpak, Snap,
-        #[cfg(target_os = "macos")]
-        Brew, Ports,
-        #[cfg(target_os = "windows")]
-        Scoop, Choco, Winget,
-    ]
-}
-
 #[derive(Debug, Clone, Copy, PartialEq)]
 struct VendorData(Vendor, [&'static str; 10]);
 
-static VENDORS: [VendorData; 26] = [
+static VENDORS: &[VendorData] = &[
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
     VendorData(Apk, [
         "apk",
         "",
@@ -145,6 +156,7 @@ static VENDORS: [VendorData; 26] = [
         "apk upgrade",
         "apk list --installed",
     ]),
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
     VendorData(Apt, [
         "apt",
         "--yes",
@@ -157,6 +169,7 @@ static VENDORS: [VendorData; 26] = [
         "apt upgrade $yes",
         "apt list --installed",
     ]),
+    #[cfg(target_os = "macos")]
     VendorData(Brew, [
         "brew",
         "",
@@ -169,6 +182,7 @@ static VENDORS: [VendorData; 26] = [
         "brew upgrade",
         "brew list",
     ]),
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
     VendorData(Cards, [
         "cards",
         "",
@@ -181,6 +195,7 @@ static VENDORS: [VendorData; 26] = [
         "cards upgrade",
         "cards list",
     ]),
+    #[cfg(target_os = "windows")]
     VendorData(Choco, [
         "choco",
         "--yes",
@@ -193,6 +208,7 @@ static VENDORS: [VendorData; 26] = [
         "choco upgrade all $yes",
         "choco list",
     ]),
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
     VendorData(Dnf, [
         "dnf",
         "--assumeyes",
@@ -205,6 +221,7 @@ static VENDORS: [VendorData; 26] = [
         "dnf update $yes",
         "dnf list --installed",
     ]),
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
     VendorData(Emerge, [
         "emerge",
         "",
@@ -217,6 +234,7 @@ static VENDORS: [VendorData; 26] = [
         "emerge -vuDN @world",
         "qlist -Iv",
     ]),
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
     VendorData(Eopkg, [
         "eopkg",
         "--yes-all",
@@ -229,6 +247,7 @@ static VENDORS: [VendorData; 26] = [
         "eopkg upgrade $yes",
         "eopkg list-installed",
     ]),
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
     VendorData(Flatpak, [
         "flatpak",
         "--assumeyes",
@@ -241,6 +260,7 @@ static VENDORS: [VendorData; 26] = [
         "flatpak update $yes",
         "flatpak list",
     ]),
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
     VendorData(Guix, [
         "guix",
         "",
@@ -253,6 +273,7 @@ static VENDORS: [VendorData; 26] = [
         "guix upgrade $yes",
         "guix package --list-installed",
     ]),
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
     VendorData(NixEnv, [
         "nix-env",
         "",
@@ -265,6 +286,7 @@ static VENDORS: [VendorData; 26] = [
         "nix-env --upgrade",
         "nix-env --query --installed",
     ]),
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
     VendorData(Opkg, [
         "opkg",
         "",
@@ -277,6 +299,7 @@ static VENDORS: [VendorData; 26] = [
         "opkg upgrade",
         "opkg list-installed",
     ]),
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
     VendorData(Pacman, [
         "pacman",
         "--noconfirm",
@@ -289,6 +312,7 @@ static VENDORS: [VendorData; 26] = [
         "pacman -Syu $yes",
         "pacman -Q",
     ]),
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
     VendorData(Pkg, [
         "pkg",
         "--yes",
@@ -301,6 +325,7 @@ static VENDORS: [VendorData; 26] = [
         "pkg upgrade $yes",
         "pkg info --all",
     ]),
+    #[cfg(target_os = "haiku")]
     VendorData(Pkgman, [
         "pkgman",
         "-y",
@@ -313,6 +338,7 @@ static VENDORS: [VendorData; 26] = [
         "pkgman update $yes",
         "pkgman search --installed-only --all",
     ]),
+    #[cfg(target_os = "macos")]
     VendorData(Ports, [
         "prt-get",
         "",
@@ -325,6 +351,7 @@ static VENDORS: [VendorData; 26] = [
         "prt-get sysup",
         "prt-get listinst",
     ]),
+    #[cfg(target_os = "windows")]
     VendorData(Scoop, [
         "scoop",
         "",
@@ -337,6 +364,7 @@ static VENDORS: [VendorData; 26] = [
         "scoop update *",
         "scoop list",
     ]),
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
     VendorData(Slackpkg, [
         "slackpkg",
         "",
@@ -349,6 +377,7 @@ static VENDORS: [VendorData; 26] = [
         "slackpkg upgrade-all",
         "ls -1 /var/log/packages",
     ]),
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
     VendorData(Snap, [
         "snap",
         "",
@@ -361,6 +390,7 @@ static VENDORS: [VendorData; 26] = [
         "snap refresh",
         "snap list",
     ]),
+    #[cfg(target_os = "android")]
     VendorData(Termux, [
         "termux",
         "--yes",
@@ -373,6 +403,7 @@ static VENDORS: [VendorData; 26] = [
         "pkg upgrade $yes",
         "pkg list-installed",
     ]),
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
     VendorData(Urpm, [
         "urpm",
         "",
@@ -385,6 +416,7 @@ static VENDORS: [VendorData; 26] = [
         "urpmi --auto-update",
         "rpm --query --all",
     ]),
+    #[cfg(target_os = "windows")]
     VendorData(Winget, [
         "winget",
         "",
@@ -397,6 +429,7 @@ static VENDORS: [VendorData; 26] = [
         "winget upgrade --all",
         "winget list",
     ]),
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
     VendorData(Xbps, [
         "xbps",
         "--yes",
@@ -409,6 +442,7 @@ static VENDORS: [VendorData; 26] = [
         "xbps-install --update $yes",
         "xbps-query --list-pkgs",
     ]),
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
     VendorData(Yay, [
         "yay",
         "--noconfirm",
@@ -421,6 +455,7 @@ static VENDORS: [VendorData; 26] = [
         "yay --topdown -Syu $yes",
         "pacman -Q",
     ]),
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
     VendorData(Yum, [
         "yum",
         "--assumeyes",
@@ -433,6 +468,7 @@ static VENDORS: [VendorData; 26] = [
         "yum update $yes",
         "yum list --installed",
     ]),
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
     VendorData(Zypper, [
         "zypper",
         "--no-confirm",

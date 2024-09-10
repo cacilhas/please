@@ -20,6 +20,10 @@ which = "6.0"
 version = "4.5"
 features = ["color", "help", "std", "suggestions", "usage", "derive"]
 
+[dependencies.strum]
+version = "0.26"
+features = ["derive"]
+
 [profile.release]
 opt-level     = "s"
 codegen-units = 1
