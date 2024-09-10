@@ -155,9 +155,11 @@ impl Params {
         if defaults.get("su").and_then(|yes| yes.as_bool()).unwrap_or_default() {
             self.su = true;
         }
-        if let Some(vendor) = defaults.get("vendor").and_then(|vendor| vendor.as_str()) {
-            let vendor: Vendor = vendor.try_into().map_err(|err: String| eyre![err])?;
-            self.vendor = Some(vendor);
+        if self.vendor.is_none() {
+            if let Some(vendor) = defaults.get("vendor").and_then(|vendor| vendor.as_str()) {
+                let vendor: Vendor = vendor.try_into().map_err(|err: String| eyre![err])?;
+                self.vendor = Some(vendor);
+            }
         }
 
         Ok(())
