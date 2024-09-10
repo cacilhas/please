@@ -21,7 +21,7 @@ pub struct Params {
     #[arg(short, long, action = ArgAction::SetTrue, help = "assume yes for all prompts")]
     pub yes: bool,
     #[cfg(not(target_os = "windows"))]
-    #[arg(short, long, action = ArgAction::SetTrue, help = "run as root (user must be wheel)")]
+    #[arg(short, long, action = ArgAction::SetTrue, help = "run as root (user must be sudoer)")]
     pub su: bool,
     #[arg(short, long, help = "set the installer command")]
     pub vendor: Option<Vendor>,
