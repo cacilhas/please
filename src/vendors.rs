@@ -75,7 +75,7 @@ impl Vendor {
     pub fn new() -> Result<Self> {
         for vendor in Vendor::iter() {
             let vendor_data: VendorData = vendor.into();
-            if let Ok(_) = which::which(vendor_data.1[0]) {
+            if which::which(vendor_data.1[0]).is_ok() {
                 return Ok(vendor)
             }
         }
@@ -103,7 +103,7 @@ impl Vendor {
         let status = Command::new("cmd").args(["/C", &command]).status()?;
         #[cfg(not(target_os = "windows"))]
         let status = if su {
-            Command::new("sudo").args(&mut command.split(" ")).status()?
+            Command::new("sudo").args(command.split(" ")).status()?
         } else {
             Command::new("sh").args(["-c", &command]).status()?
         };
