@@ -468,7 +468,7 @@ static VENDORS: &[VendorData] = &[
         "yay",
         "--noconfirm",
         "yay --topdown --cleanafter -S $yes $args",
-        "pacman -Rs $yes $",
+        "pacman -Rs $yes $args",
         "yay --topdown --cleanafter -S $yes $args",
         "yay --topdown -Ss $args",
         "yay --topdown -Si $args",
