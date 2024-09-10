@@ -31,6 +31,15 @@ fn main() -> Result<()> {
         }
     }
 
+    #[cfg(not(target_os = "windows"))]
+    if let Cmd::List { pager, paginate, .. } = params.cmd.clone() {
+        if paginate {
+            use_pager = pager
+                .or_else(|| env::var("PAGER").ok())
+                .or_else(|| Some("less".to_string()));
+        }
+    }
+
     let cmd: PlsCommand = (&params.cmd).into();
     let vendor = match params.vendor {
         Some(vendor) => vendor,

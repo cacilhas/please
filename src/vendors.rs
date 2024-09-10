@@ -24,8 +24,6 @@ pub enum Vendor {
     #[cfg(target_os = "linux")] /* TODO: filter by distro */
     Pkg,
     #[cfg(target_os = "linux")] /* TODO: filter by distro */
-    Flatpak,
-    #[cfg(target_os = "linux")] /* TODO: filter by distro */
     Slackpkg,
     #[cfg(target_os = "linux")] /* TODO: filter by distro */
     Cards,
@@ -41,6 +39,8 @@ pub enum Vendor {
     Xbps,
     #[cfg(target_os = "linux")] /* TODO: filter by distro */
     Zypper,
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
+    Flatpak,
     #[cfg(target_os = "linux")] /* TODO: filter by distro */
     Snap,
     #[cfg(target_os = "haiku")]
@@ -125,12 +125,18 @@ impl PlsCommand {
             PlsCommand::Info => vendor.1[6].to_owned(),
             PlsCommand::Update => vendor.1[7].to_owned(),
             PlsCommand::UpgradeAll => vendor.1[8].to_owned(),
-            PlsCommand::List => vendor.1[9].to_owned(),
             PlsCommand::Search => {
                 if let Some(pager) = pager {
                     format!("{} | {}", vendor.1[5], pager)
                 } else {
                     vendor.1[5].to_owned()
+                }
+            }
+            PlsCommand::List => {
+                if let Some(pager) = pager {
+                    format!("{} | {}", vendor.1[9], pager)
+                } else {
+                    vendor.1[9].to_owned()
                 }
             }
         }
@@ -327,7 +333,7 @@ static VENDORS: &[VendorData] = &[
         "pacman -Syu $yes",
         "pacman -Q",
     ]),
-    #[cfg(target_os = "linux")] /* TODO: filter by distro */
+    #[cfg(any(target_os = "freebsd", target_os = "openbsd", target_os = "dragonfly", target_os = "netbsd"))]
     VendorData(Pkg, [
         "pkg",
         "--yes",

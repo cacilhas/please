@@ -63,7 +63,12 @@ pub enum Cmd {
     #[command(about = "update database")]
     Update,
     #[command(about = "list installed packages")]
-    List,
+    List {
+        #[arg(short, long, action = ArgAction::SetTrue, help = "paginate results")]
+        paginate: bool,
+        #[arg(skip)]
+        pager: Option<String>,
+    },
     #[command(about = "list available vendors")]
     ListVendors,
 }
@@ -122,9 +127,22 @@ impl Params {
                             .get("pager")
                             .and_then(|pager| pager.as_str())
                             .map(|pager| pager.to_owned())
+                            .filter(|pager| !pager.is_empty())
                             .map(|pager| pager.replace("$args", args)),
                         paginate: true,
                         args: args.to_owned(),
+                    }
+                }
+            }
+            Cmd::List { .. } => {
+                if defaults.get("pager").is_some() {
+                    self.cmd = Cmd::List {
+                        pager: defaults
+                            .get("pager")
+                            .and_then(|pager| pager.as_str())
+                            .map(|pager| pager.to_owned())
+                            .filter(|pager| !pager.is_empty()),
+                        paginate: true,
                     }
                 }
             }
@@ -168,7 +186,7 @@ impl Display for Cmd {
             Cmd::Search { .. } => write!(f, "search"),
             Cmd::Info { .. } => write!(f, "info"),
             Cmd::Update => write!(f, "update"),
-            Cmd::List => write!(f, "list"),
+            Cmd::List { .. } => write!(f, "list"),
             Cmd::ListVendors => write!(f, "list-vendors"),
         }
     }
@@ -184,7 +202,7 @@ impl From<&Cmd> for PlsCommand {
             Cmd::Search {..} => PlsCommand::Search,
             Cmd::Info {..} => PlsCommand::Info,
             Cmd::Update => PlsCommand::Update,
-            Cmd::List => PlsCommand::List,
+            Cmd::List { .. } => PlsCommand::List,
             _ => PlsCommand::List,
         }
     }
