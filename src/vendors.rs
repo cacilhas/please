@@ -272,14 +272,14 @@ static VENDORS: &[VendorData] = &[
     VendorData(Flatpak, [
         "flatpak",
         "--assumeyes",
-        "flatpak install $yes $args",
-        "flatpak uninstall $yes $args",
-        "flatpak update $yes $args",
-        "flatpak search $args",
-        "flatpak info $args",
+        "flatpak --user install $yes $args",
+        "flatpak --user uninstall $yes $args",
+        "flatpak --user update $yes $args",
+        "flatpak --user search $args",
+        "flatpak --user info $args",
         "",
-        "flatpak update $yes",
-        "flatpak list",
+        "flatpak --user update $yes",
+        "flatpak --user list",
     ]),
     #[cfg(target_os = "linux")]
     VendorData(Guix, [
