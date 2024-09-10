@@ -14,7 +14,9 @@ fn main() -> Result<()> {
 
     if params.cmd == Cmd::ListVendors {
         for vendor in Vendor::iter() {
-            println!("{:?}", vendor);
+            if vendor.is_available() {
+                println!("{:?}", vendor);
+            }
         }
         return Ok(())
     }

@@ -74,8 +74,7 @@ pub enum PlsCommand {
 impl Vendor {
     pub fn new() -> Result<Self> {
         for vendor in Vendor::iter() {
-            let vendor_data: VendorData = vendor.into();
-            if which::which(vendor_data.1[0]).is_ok() {
+            if vendor.is_available() {
                 return Ok(vendor)
             }
         }
@@ -83,6 +82,11 @@ impl Vendor {
             "no vendor installed, candidates are: {}",
             Vendor::iter().map(|vendor| vendor.to_string()).collect::<Vec<String>>().join(", "),
         ))
+    }
+
+    pub fn is_available(&self) -> bool {
+            let vendor_data: VendorData = (*self).into();
+            which::which(vendor_data.1[0]).is_ok()
     }
 
     pub fn execute(self, command: PlsCommand, args: &str, yes: bool, su: bool, dry_run: bool) -> Result<i32> {
