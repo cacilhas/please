@@ -11,7 +11,10 @@ perform its tasks.
 
 ## Installation
 
+First install `rustup` using your system package manager, and then run:
+
 ```sh
+rustup toolchain install nightly
 cargo +nightly install please-install
 ```
 
