@@ -132,6 +132,30 @@ You also may supply sessions to add per-subcommand settings. Valid
 sessions are `[install]`, `[remove]`, `[update]`, `[upgrade]`, `[search]`, and
 `[list]`.
 
+Suggested configuration file:
+
+```toml
+assume-yes = true
+
+[install]
+su = true
+
+[list]
+pager = "bat --file-name='installed packages'"
+
+[remove]
+su = true
+
+[search]
+pager = "bat --file-name='search $args'"
+
+[upgrade]
+su = true
+
+[update]
+su = true
+```
+
 ## License
 
 This software is licensed under the [BSD-3-Clause License][].
