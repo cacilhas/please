@@ -156,6 +156,10 @@ su = true
 su = true
 ```
 
+## Known bugs
+
+- `--vendor` flag has been ignored [#1](https://github.com/cacilhas/please/issues/1).
+
 ## License
 
 This software is licensed under the [BSD-3-Clause License][].
