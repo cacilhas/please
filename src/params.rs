@@ -5,25 +5,31 @@ use toml::Table;
 use crate::{vendors::PlsCommand, Vendor};
 
 
+/// A unified interface package manager for many OSes.
 #[derive(Debug, Parser)]
 #[command(
     author = "Montegasppα Cacilhας <montegasppa@cacilhas.info>",
-    about = "A unified interface package manager for many OSes.",
     name = "please",
+    about, version,
 )]
 pub struct Params {
-    #[arg(short = 'x', long, global = true, action = ArgAction::SetTrue, help = "skip settings")]
+    /// skip settings
+    #[arg(short = 'x', long, global = true, action = ArgAction::SetTrue)]
     pub skip_settings: bool,
-    #[arg(short, long, global = true, help = "configuration file")]
+    /// configuration file
+    #[arg(short, long, global = true)]
     pub config: Option<String>,
-    #[arg(short, long, global = true, action = ArgAction::SetTrue, help = "dry run (do not actually execute commands)")]
+    /// dry run (do not actually execute commands)
+    #[arg(short, long, global = true, action = ArgAction::SetTrue)]
     pub dry_run: bool,
-    #[arg(short, long, global = true, action = ArgAction::SetTrue, help = "assume yes for all prompts")]
+    /// assume yes for all prompts
+    #[arg(short, long, global = true, action = ArgAction::SetTrue)]
     pub yes: bool,
     #[cfg(not(target_os = "windows"))]
     #[arg(short, long, global = true, action = ArgAction::SetTrue, help = "run as root (user must be sudoer)")]
     pub su: bool,
-    #[arg(short, long, global = true, help = "set the installer command")]
+    /// set the installer command
+    #[arg(short, long, global = true)]
     pub vendor: Option<Vendor>,
     #[command(subcommand)]
     pub cmd: Cmd,
@@ -33,38 +39,45 @@ pub struct Params {
 pub enum Cmd {
     #[command(about = "install package(s)")]
     Install {
-        #[arg(name = "PACKAGE", help = "package(s) to be installed")]
+        /// package(s) to be installed
+        #[arg(name = "PACKAGE")]
         args: Vec<String>,
     },
     #[command(about = "remove package(s)")]
     Remove {
-        #[arg(name = "PACKAGE", help = "package(s) to be removed")]
+        /// package(s) to be removed
+        #[arg(name = "PACKAGE")]
         args: Vec<String>,
     },
     #[command(about = "upgrade package(s)")]
     Upgrade {
-        #[arg(name = "PACKAGE", help = "package(s) to be upgraded")]
+        /// package(s) to be upgraded
+        #[arg(name = "PACKAGE")]
         args: Vec<String>,
     },
     #[command(about = "search for package(s)")]
     Search {
-        #[arg(name = "QUERY", help = "text to be searched")]
+        /// text to be searched
+        #[arg(name = "QUERY")]
         args: String,
-        #[arg(short, long, action = ArgAction::SetTrue, help = "paginate results")]
+        /// paginate results
+        #[arg(short, long, action = ArgAction::SetTrue)]
         paginate: bool,
         #[arg(skip)]
         pager: Option<String>,
     },
     #[command(about = "get info for a package")]
     Info {
-        #[arg(name = "PACKAGE", help = "package for which to get info")]
+        /// package for which to get info
+        #[arg(name = "PACKAGE")]
         args: String,
     },
     #[command(about = "update database")]
     Update,
     #[command(about = "list installed packages")]
     List {
-        #[arg(short, long, action = ArgAction::SetTrue, help = "paginate results")]
+        /// paginate results
+        #[arg(short, long, action = ArgAction::SetTrue)]
         paginate: bool,
         #[arg(skip)]
         pager: Option<String>,
