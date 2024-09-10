@@ -44,7 +44,7 @@ Options:
   -h, --help             Print help
 ```
 
-You can also call `--help` by subcommand:
+You can also call `--help` on subcommand:
 
 ```sh
 sh> please install --help
