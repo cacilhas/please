@@ -1,8 +1,8 @@
 # Please Installer
 
-Please Installer is a unified interface package manager for many OSes inspired
-by [UPT][]. Even though it has started as a fork from UPT, Please Installer was
-completely rewritten from scratch.
+[Please Installer][] is a unified interface package manager for many OSes
+inspired by [UPT][]. Even though it has started as a fork from UPT, Please
+Installer was completely rewritten from scratch.
 
 Please Installer is a beta release, not much is properly tested.
 
@@ -170,5 +170,6 @@ This software is licensed under the [BSD-3-Clause License][].
 [BSD-3-Clause License]: https://opensource.org/licenses/BSD-3-Clause
 [COPYING]: https://gihub.com/cacilhas/please-install/blob/master/COPYING
 [open issues]: https://github.com/cacilhas/please/issues
+[Please Installer]: https://crates.io/crates/please-install
 [TOML]: https://toml.io/en/
 [UPT]: https://crates.io/crates/upt
