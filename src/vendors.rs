@@ -1,5 +1,5 @@
 use eyre::{eyre, Result};
-use std::process::Command;
+use std::{ffi::OsString, process::Command};
 
 
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -99,6 +99,17 @@ impl PlsCommand {
     }
 }
 
+impl From<OsString> for Vendor {
+    fn from(value: OsString) -> Self {
+        let value = value.to_string_lossy().to_lowercase();
+        for vendor in get_vendors().iter() {
+            if format!("{:?}", vendor).to_lowercase() == value {
+                return *vendor;
+            }
+        }
+        panic!("invalid vendor name {}", value);
+    }
+}
 
 //----------------------------------------------------------------------------//
 use Vendor::*;

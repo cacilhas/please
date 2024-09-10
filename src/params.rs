@@ -1,6 +1,6 @@
 use clap::{ArgAction, Parser, Subcommand};
 
-use crate::vendors::PlsCommand;
+use crate::{vendors::PlsCommand, Vendor};
 
 
 #[derive(Debug, Parser)]
@@ -14,6 +14,8 @@ pub struct Params {
     pub dry_run: bool,
     #[arg(short, long, action = ArgAction::SetTrue, help = "assume yes for all prompts")]
     pub yes: bool,
+    #[arg(short, long, help = "set the installer command")]
+    pub vendor: Option<Vendor>,
     #[command(subcommand)]
     pub cmd: Cmd,
 }

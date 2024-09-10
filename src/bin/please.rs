@@ -11,7 +11,10 @@ fn main() -> Result<()> {
     let assume_yes = params.yes;
     let args = params.cmd.args();
     let cmd: PlsCommand = (&params.cmd).into();
-    let vendor = Vendor::new()?;
+    let vendor = match params.vendor {
+        Some(vendor) => vendor,
+        None => Vendor::new()?,
+    };
 
     let status = vendor.execute(cmd, &args, assume_yes, dry_run)?;
     exit(status);
