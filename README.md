@@ -161,7 +161,7 @@ su = true
 
 ## Known bugs
 
-Check [open issues][] for known bugs and features requests.
+Check [open issues][] for known bugs and feature requests.
 
 ## License
 
