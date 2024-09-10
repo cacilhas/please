@@ -498,3 +498,17 @@ impl From<Vendor> for VendorData {
         panic!("unreachable code reached for vendor {:?}", value);
     }
 }
+
+impl TryFrom<&str> for Vendor {
+    type Error = String;
+
+    fn try_from(value: &str) -> std::result::Result<Self, Self::Error> {
+        let value = value.to_lowercase();
+        for vendor in Vendor::iter() {
+            if format!("{:?}", vendor).to_lowercase() == value {
+                return Ok(vendor);
+            }
+        }
+        Err(format!("invalid vendor name {}", value))
+    }
+}

@@ -1,5 +1,7 @@
+use std::{env, fs::File, io::Read, path::PathBuf};
 use clap::{ArgAction, Parser, Subcommand};
-
+use eyre::{eyre, Result};
+use toml::Table;
 use crate::{vendors::PlsCommand, Vendor};
 
 
@@ -10,6 +12,8 @@ use crate::{vendors::PlsCommand, Vendor};
     name = "please",
 )]
 pub struct Params {
+    #[arg(short, long, help = "configuration file")]
+    pub config: Option<String>,
     #[arg(short, long = "dry-run", action = ArgAction::SetTrue, help = "dry run (do not actually execute commands)")]
     pub dry_run: bool,
     #[arg(short, long, action = ArgAction::SetTrue, help = "assume yes for all prompts")]
@@ -56,6 +60,51 @@ pub enum Cmd {
     List,
     #[command(about = "list available vendors")]
     ListVendors,
+}
+
+impl Params {
+    pub fn config(mut self) -> Self {
+        let config = match &self.config {
+            Some(config) => PathBuf::from(config),
+            None => {
+                let config_home = match env::var("XDG_CONFIG_HOME") {
+                    Ok(config_home) => PathBuf::from(config_home),
+                    Err(_) => PathBuf::from(env!["HOME"]).join(".config"),
+                };
+                config_home.join("please.toml")
+            }
+        };
+        if config.exists() {
+            let _ = self.load(config);
+        }
+
+        self
+    }
+
+    fn load(&mut self, config: PathBuf) -> Result<()> {
+        let mut file = File::open(config)?;
+        let mut content = String::new();
+        file.read_to_string(&mut content)?;
+        let mut defaults: Table = content.parse()?;
+        let cmd = format!("{:?}", &self.cmd).to_lowercase();
+
+        if let Some(value) = defaults.get(cmd.as_str()).and_then(|value| value.as_table()) {
+            defaults = value.clone();
+        }
+
+        if defaults.get("yes").and_then(|yes| yes.as_bool()).unwrap_or_default() {
+            self.yes = true;
+        }
+        if defaults.get("su").and_then(|yes| yes.as_bool()).unwrap_or_default() {
+            self.su = true;
+        }
+        if let Some(vendor) = defaults.get("vendor").and_then(|vendor| vendor.as_str()) {
+            let vendor: Vendor = vendor.try_into().map_err(|err: String| eyre![err])?;
+            self.vendor = Some(vendor);
+        }
+
+        Ok(())
+    }
 }
 
 impl Cmd {

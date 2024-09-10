@@ -7,7 +7,7 @@ use strum::IntoEnumIterator;
 
 
 fn main() -> Result<()> {
-    let params = Params::parse();
+    let params = Params::parse().config();
     let dry_run = params.dry_run;
     let assume_yes = params.yes;
     let args = params.cmd.args();
