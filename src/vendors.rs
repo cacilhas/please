@@ -89,9 +89,9 @@ impl Vendor {
             which::which(vendor_data.1[0]).is_ok()
     }
 
-    pub fn execute(self, command: PlsCommand, args: &str, yes: bool, su: bool, dry_run: bool) -> Result<i32> {
+    pub fn execute(self, command: PlsCommand, args: &str, yes: bool, su: bool, dry_run: bool, pager: Option<String>) -> Result<i32> {
         let vendor_data: VendorData = self.into();
-        let command = command.format(vendor_data, args, yes);
+        let command = command.format(vendor_data, args, yes, pager);
 
         if command.is_empty() {
             eprintln!("command not supported by the current vendor");
@@ -117,16 +117,22 @@ impl Vendor {
 }
 
 impl PlsCommand {
-    fn format(self, vendor: VendorData, args: &str, yes: bool) -> String {
+    fn format(self, vendor: VendorData, args: &str, yes: bool, pager: Option<String>) -> String {
         match self {
             PlsCommand::Install => vendor.1[2].to_owned(),
             PlsCommand::Remove => vendor.1[3].to_owned(),
             PlsCommand::Upgrade => vendor.1[4].to_owned(),
-            PlsCommand::Search => vendor.1[5].to_owned(),
             PlsCommand::Info => vendor.1[6].to_owned(),
             PlsCommand::Update => vendor.1[7].to_owned(),
             PlsCommand::UpgradeAll => vendor.1[8].to_owned(),
             PlsCommand::List => vendor.1[9].to_owned(),
+            PlsCommand::Search => {
+                if let Some(pager) = pager {
+                    format!("{} | {}", vendor.1[5], pager)
+                } else {
+                    vendor.1[5].to_owned()
+                }
+            }
         }
             .replace("$yes", if yes {vendor.1[1]} else {""})
             .replace("$args", args)

@@ -29,31 +29,35 @@ pub struct Params {
     pub cmd: Cmd,
 }
 
-#[derive(Debug, PartialEq, Subcommand)]
+#[derive(Clone, Debug, PartialEq, Subcommand)]
 pub enum Cmd {
     #[command(about = "install package(s)")]
     Install {
-        #[arg(name = "package(s)", help = "package(s) to be installed")]
+        #[arg(name = "PACKAGE", help = "package(s) to be installed")]
         args: Vec<String>,
     },
     #[command(about = "remove package(s)")]
     Remove {
-        #[arg(name = "package(s)", help = "package(s) to be removed")]
+        #[arg(name = "PACKAGE", help = "package(s) to be removed")]
         args: Vec<String>,
     },
     #[command(about = "upgrade package(s)")]
     Upgrade {
-        #[arg(name = "package(s)", help = "package(s) to be upgraded")]
+        #[arg(name = "PACKAGE", help = "package(s) to be upgraded")]
         args: Vec<String>,
     },
     #[command(about = "search for package(s)")]
     Search {
-        #[arg(name = "query", help = "text to be searched")]
+        #[arg(name = "QUERY", help = "text to be searched")]
         args: String,
+        #[arg(short, long, action = ArgAction::SetTrue, help = "paginate results")]
+        paginate: bool,
+        #[arg(skip)]
+        pager: Option<String>,
     },
     #[command(about = "get info for a package")]
     Info {
-        #[arg(name = "package", help = "package for which to get info")]
+        #[arg(name = "PACKAGE", help = "package for which to get info")]
         args: String,
     },
     #[command(about = "update database")]
@@ -110,6 +114,23 @@ impl Params {
             }
         }
 
+        match &self.cmd {
+            Cmd::Search { args, .. } => {
+                if defaults.get("pager").is_some() {
+                    self.cmd = Cmd::Search {
+                        pager: defaults
+                            .get("pager")
+                            .and_then(|pager| pager.as_str())
+                            .map(|pager| pager.to_owned())
+                            .map(|pager| pager.replace("$args", args)),
+                        paginate: true,
+                        args: args.to_owned(),
+                    }
+                }
+            }
+            _ => (),
+        }
+
         if defaults.get("assume-yes").and_then(|yes| yes.as_bool()).unwrap_or_default() {
             self.yes = true;
         }
@@ -131,7 +152,7 @@ impl Cmd {
             Cmd::Install { args } => args.join(" "),
             Cmd::Remove { args } => args.join(" "),
             Cmd::Upgrade { args } => args.join(" "),
-            Cmd::Search { args } => args.to_string(),
+            Cmd::Search { args, .. } => args.to_string(),
             Cmd::Info { args } => args.to_string(),
             _ => String::new(),
         }

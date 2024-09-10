@@ -1,4 +1,4 @@
-use std::process::exit;
+use std::{env, process::exit};
 
 use clap::Parser;
 use eyre::Result;
@@ -11,6 +11,7 @@ fn main() -> Result<()> {
     let dry_run = params.dry_run;
     let assume_yes = params.yes;
     let args = params.cmd.args();
+    let mut use_pager: Option<String> = None;
 
     if params.cmd == Cmd::ListVendors {
         for vendor in Vendor::iter() {
@@ -19,6 +20,15 @@ fn main() -> Result<()> {
             }
         }
         return Ok(())
+    }
+
+    #[cfg(not(target_os = "windows"))]
+    if let Cmd::Search { pager, paginate, .. } = params.cmd.clone() {
+        if paginate {
+            use_pager = pager
+                .or_else(|| env::var("PAGER").ok())
+                .or_else(|| Some("less".to_string()));
+        }
     }
 
     let cmd: PlsCommand = (&params.cmd).into();
@@ -31,6 +41,6 @@ fn main() -> Result<()> {
     #[cfg(not(target_os = "windows"))]
     let su = params.su;
 
-    let status = vendor.execute(cmd, &args, assume_yes, su, dry_run)?;
+    let status = vendor.execute(cmd, &args, assume_yes, su, dry_run, use_pager)?;
     exit(status);
 }
