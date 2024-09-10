@@ -2,7 +2,8 @@ use std::process::exit;
 
 use clap::Parser;
 use eyre::Result;
-use please_install::{Params, PlsCommand, Vendor};
+use please_install::{Cmd, Params, PlsCommand, Vendor};
+use strum::IntoEnumIterator;
 
 
 fn main() -> Result<()> {
@@ -10,6 +11,14 @@ fn main() -> Result<()> {
     let dry_run = params.dry_run;
     let assume_yes = params.yes;
     let args = params.cmd.args();
+
+    if params.cmd == Cmd::ListVendors {
+        for vendor in Vendor::iter() {
+            println!("{:?}", vendor);
+        }
+        return Ok(())
+    }
+
     let cmd: PlsCommand = (&params.cmd).into();
     let vendor = match params.vendor {
         Some(vendor) => vendor,

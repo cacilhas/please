@@ -23,7 +23,7 @@ pub struct Params {
     pub cmd: Cmd,
 }
 
-#[derive(Debug, Subcommand)]
+#[derive(Debug, PartialEq, Subcommand)]
 pub enum Cmd {
     #[command(about = "install package(s)")]
     Install {
@@ -54,6 +54,8 @@ pub enum Cmd {
     Update,
     #[command(about = "list installed packages")]
     List,
+    #[command(about = "list available vendors")]
+    ListVendors,
 }
 
 impl Cmd {
@@ -80,6 +82,7 @@ impl From<&Cmd> for PlsCommand {
             Cmd::Info {..} => PlsCommand::Info,
             Cmd::Update => PlsCommand::Update,
             Cmd::List => PlsCommand::List,
+            _ => PlsCommand::List,
         }
     }
 }

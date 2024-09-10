@@ -6,56 +6,57 @@ use std::{ffi::OsString, process::Command};
 #[derive(Debug, Clone, Copy, EnumIter, PartialEq)]
 pub enum Vendor {
     #[cfg(target_os = "linux")] /* TODO: filter by distro */
-    Apk,
-    #[cfg(target_os = "linux")] /* TODO: filter by distro */
     Apt,
-    #[cfg(target_os = "macos")]
-    Brew,
-    Cards,
-    #[cfg(target_os = "windows")]
-    Choco,
-    #[cfg(target_os = "linux")] /* TODO: filter by distro */
-    Dnf,
-    #[cfg(target_os = "linux")] /* TODO: filter by distro */
-    Emerge,
-    #[cfg(target_os = "linux")] /* TODO: filter by distro */
-    Eopkg,
-    #[cfg(target_os = "linux")] /* TODO: filter by distro */
-    Flatpak,
-    #[cfg(target_os = "linux")] /* TODO: filter by distro */
-    Guix,
-    #[cfg(target_os = "linux")] /* TODO: filter by distro */
-    NixEnv,
-    #[cfg(target_os = "linux")] /* TODO: filter by distro */
-    Opkg,
-    #[cfg(target_os = "linux")] /* TODO: filter by distro */
-    Pacman,
-    #[cfg(target_os = "linux")] /* TODO: filter by distro */
-    Pkg,
-    #[cfg(target_os = "haiku")]
-    Pkgman,
-    #[cfg(target_os = "macos")]
-    Ports,
-    #[cfg(target_os = "windows")]
-    Scoop,
-    #[cfg(target_os = "linux")] /* TODO: filter by distro */
-    Slackpkg,
-    #[cfg(target_os = "linux")] /* TODO: filter by distro */
-    Snap,
-    #[cfg(target_os = "linux")] /* TODO: filter by distro */
-    Urpm,
-    #[cfg(target_os = "android")]
-    Termux,
-    #[cfg(target_os = "windows")]
-    Winget,
-    #[cfg(target_os = "linux")] /* TODO: filter by distro */
-    Xbps,
     #[cfg(target_os = "linux")] /* TODO: filter by distro */
     Yay,
     #[cfg(target_os = "linux")] /* TODO: filter by distro */
     Yum,
     #[cfg(target_os = "linux")] /* TODO: filter by distro */
+    Pacman,
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
+    Apk,
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
+    Emerge,
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
+    Guix,
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
+    NixEnv,
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
+    Pkg,
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
+    Flatpak,
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
+    Slackpkg,
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
+    Cards,
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
+    Dnf,
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
+    Eopkg,
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
+    Opkg,
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
+    Urpm,
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
+    Xbps,
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
     Zypper,
+    #[cfg(target_os = "linux")] /* TODO: filter by distro */
+    Snap,
+    #[cfg(target_os = "haiku")]
+    Pkgman,
+    #[cfg(target_os = "macos")]
+    Brew,
+    #[cfg(target_os = "macos")]
+    Ports,
+    #[cfg(target_os = "windows")]
+    Scoop,
+    #[cfg(target_os = "windows")]
+    Choco,
+    #[cfg(target_os = "windows")]
+    Winget,
+    #[cfg(target_os = "android")]
+    Termux,
 }
 
 #[derive(Debug, Clone, Copy)]
