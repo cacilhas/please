@@ -1,4 +1,4 @@
-use std::{env, fs::File, io::Read, path::PathBuf};
+use std::{env, fmt::Display, fs::File, io::Read, path::PathBuf};
 use clap::{ArgAction, Parser, Subcommand};
 use eyre::{eyre, Result};
 use toml::Table;
@@ -12,6 +12,8 @@ use crate::{vendors::PlsCommand, Vendor};
     name = "please",
 )]
 pub struct Params {
+    #[arg(short = 'x', long, action = ArgAction::SetTrue, help = "skip settings")]
+    pub skip_settings: bool,
     #[arg(short, long, help = "configuration file")]
     pub config: Option<String>,
     #[arg(short, long = "dry-run", action = ArgAction::SetTrue, help = "dry run (do not actually execute commands)")]
@@ -64,6 +66,10 @@ pub enum Cmd {
 
 impl Params {
     pub fn config(mut self) -> Self {
+        if self.skip_settings {
+            return self;
+        }
+
         let config = match &self.config {
             Some(config) => PathBuf::from(config),
             None => {
@@ -86,13 +92,15 @@ impl Params {
         let mut content = String::new();
         file.read_to_string(&mut content)?;
         let mut defaults: Table = content.parse()?;
-        let cmd = format!("{:?}", &self.cmd).to_lowercase();
-
-        if let Some(value) = defaults.get(cmd.as_str()).and_then(|value| value.as_table()) {
-            defaults = value.clone();
+        let cmd = self.cmd.to_string();
+        let bind = defaults.clone();
+        if let Some(value) = bind.get(cmd.as_str()).and_then(|value| value.as_table()) {
+            for (k, v) in value.iter() {
+                defaults.insert(k.to_string(), v.clone());
+            }
         }
 
-        if defaults.get("yes").and_then(|yes| yes.as_bool()).unwrap_or_default() {
+        if defaults.get("assume-yes").and_then(|yes| yes.as_bool()).unwrap_or_default() {
             self.yes = true;
         }
         if defaults.get("su").and_then(|yes| yes.as_bool()).unwrap_or_default() {
@@ -116,6 +124,21 @@ impl Cmd {
             Cmd::Search { args } => args.to_string(),
             Cmd::Info { args } => args.to_string(),
             _ => String::new(),
+        }
+    }
+}
+
+impl Display for Cmd {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Cmd::Install { .. } => write!(f, "install"),
+            Cmd::Remove { .. } => write!(f, "remove"),
+            Cmd::Upgrade { .. } => write!(f, "upgrade"),
+            Cmd::Search { .. } => write!(f, "search"),
+            Cmd::Info { .. } => write!(f, "info"),
+            Cmd::Update => write!(f, "update"),
+            Cmd::List => write!(f, "list"),
+            Cmd::ListVendors => write!(f, "list-vendors"),
         }
     }
 }

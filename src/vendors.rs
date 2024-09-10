@@ -1,6 +1,6 @@
 use eyre::{eyre, Result};
 use strum::{EnumIter, IntoEnumIterator};
-use std::{ffi::OsString, process::Command};
+use std::{ffi::OsString, fmt::Display, process::Command};
 
 
 #[derive(Debug, Clone, Copy, EnumIter, PartialEq)]
@@ -81,7 +81,7 @@ impl Vendor {
         }
         Err(eyre!(
             "no vendor installed, candidates are: {}",
-            Vendor::iter().map(|vendor| format!("{:?}", vendor)).collect::<Vec<String>>().join(", "),
+            Vendor::iter().map(|vendor| vendor.to_string()).collect::<Vec<String>>().join(", "),
         ))
     }
 
@@ -133,7 +133,7 @@ impl From<OsString> for Vendor {
     fn from(value: OsString) -> Self {
         let value = value.to_string_lossy().to_lowercase();
         for vendor in Vendor::iter() {
-            if format!("{:?}", vendor).to_lowercase() == value {
+            if vendor.to_string().to_lowercase() == value {
                 return vendor;
             }
         }
@@ -488,6 +488,12 @@ static VENDORS: &[VendorData] = &[
     ]),
 ];
 
+impl Display for Vendor {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{:?}", self)
+    }
+}
+
 impl From<Vendor> for VendorData {
     fn from(value: Vendor) -> Self {
         for vendor in VENDORS.iter() {
@@ -505,7 +511,7 @@ impl TryFrom<&str> for Vendor {
     fn try_from(value: &str) -> std::result::Result<Self, Self::Error> {
         let value = value.to_lowercase();
         for vendor in Vendor::iter() {
-            if format!("{:?}", vendor).to_lowercase() == value {
+            if vendor.to_string().to_lowercase() == value {
                 return Ok(vendor);
             }
         }
