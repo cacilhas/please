@@ -84,7 +84,7 @@ impl Vendor {
         ))
     }
 
-    pub fn execute(self, command: PlsCommand, args: &str, yes: bool, dry_run: bool) -> Result<i32> {
+    pub fn execute(self, command: PlsCommand, args: &str, yes: bool, su: bool, dry_run: bool) -> Result<i32> {
         let vendor_data: VendorData = self.into();
         let command = command.format(vendor_data, args, yes);
 
@@ -101,7 +101,11 @@ impl Vendor {
         #[cfg(target_os = "windows")]
         let status = Command::new("cmd").args(["/C", &command]).status()?;
         #[cfg(not(target_os = "windows"))]
-        let status = Command::new("sh").args(["-c", &command]).status()?;
+        let status = if su {
+            Command::new("sudo").args(&mut command.split(" ")).status()?
+        } else {
+            Command::new("sh").args(["-c", &command]).status()?
+        };
 
         Ok(status.code().unwrap_or_default())
     }

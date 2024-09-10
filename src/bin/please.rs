@@ -15,7 +15,11 @@ fn main() -> Result<()> {
         Some(vendor) => vendor,
         None => Vendor::new()?,
     };
+    #[cfg(target_os = "windows")]
+    let su = false;
+    #[cfg(not(target_os = "windows"))]
+    let su = params.su;
 
-    let status = vendor.execute(cmd, &args, assume_yes, dry_run)?;
+    let status = vendor.execute(cmd, &args, assume_yes, su, dry_run)?;
     exit(status);
 }
