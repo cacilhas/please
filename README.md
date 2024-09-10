@@ -21,6 +21,14 @@ cargo +nightly-2024-09-01 install please-install
 **Note** that, in order to use `cargo` and `please` on Posix systems, you need
 to put `$CARGO_HOME/bin` (usually `$HOME/.cargo/bin`) into `PATH`.
 
+### Development version
+
+In order to install from `HEAD`, use the command:
+
+```sh
+cargo +nightly-2024-09-01 install please-install --git=https://github.com/cacilhas/please.git
+```
+
 ## Usage
 
 ```
