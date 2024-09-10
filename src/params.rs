@@ -12,18 +12,18 @@ use crate::{vendors::PlsCommand, Vendor};
     name = "please",
 )]
 pub struct Params {
-    #[arg(short = 'x', long, action = ArgAction::SetTrue, help = "skip settings")]
+    #[arg(short = 'x', long, global = true, action = ArgAction::SetTrue, help = "skip settings")]
     pub skip_settings: bool,
-    #[arg(short, long, help = "configuration file")]
+    #[arg(short, long, global = true, help = "configuration file")]
     pub config: Option<String>,
-    #[arg(short, long = "dry-run", action = ArgAction::SetTrue, help = "dry run (do not actually execute commands)")]
+    #[arg(short, long, global = true, action = ArgAction::SetTrue, help = "dry run (do not actually execute commands)")]
     pub dry_run: bool,
-    #[arg(short, long, action = ArgAction::SetTrue, help = "assume yes for all prompts")]
+    #[arg(short, long, global = true, action = ArgAction::SetTrue, help = "assume yes for all prompts")]
     pub yes: bool,
     #[cfg(not(target_os = "windows"))]
-    #[arg(short, long, action = ArgAction::SetTrue, help = "run as root (user must be sudoer)")]
+    #[arg(short, long, global = true, action = ArgAction::SetTrue, help = "run as root (user must be sudoer)")]
     pub su: bool,
-    #[arg(short, long, help = "set the installer command")]
+    #[arg(short, long, global = true, help = "set the installer command")]
     pub vendor: Option<Vendor>,
     #[command(subcommand)]
     pub cmd: Cmd,
