@@ -20,9 +20,9 @@ cargo +nightly-2024-09-01 install please-install
 
 ## Usage
 
-```sh
-sh> please help
-A unified interface package manager for many OSes.
+```
+❯ please help
+A unified interface package manager for many OSes
 
 Usage: please [OPTIONS] <COMMAND>
 
@@ -45,73 +45,54 @@ Options:
   -s, --su               run as root (user must be sudoer)
   -v, --vendor <VENDOR>  set the installer command
   -h, --help             Print help
+  -V, --version          Print version
 ```
 
 You can also call `help` on subcommand:
 
-```sh
-sh> please help install
+```
+❯ please help install
 install package(s)
 
-Usage: please install [PACKAGE]...
+Usage: please install [OPTIONS] [PACKAGE]...
 
 Arguments:
   [PACKAGE]...  package(s) to be installed
 
 Options:
-  -h, --help  Print help
+  -x, --skip-settings    skip settings
+  -c, --config <CONFIG>  configuration file
+  -d, --dry-run          dry run (do not actually execute commands)
+  -y, --yes              assume yes for all prompts
+  -s, --su               run as root (user must be sudoer)
+  -v, --vendor <VENDOR>  set the installer command
+  -h, --help             Print help
 ```
 
 Supported vendors (backend package managers) are basically the same supported by
 UPT:
 
-```
-+------------------------------------------------------+----------------------+
 | OS                                                   | Tools                |
-+------------------------------------------------------+----------------------+
+|------------------------------------------------------|----------------------|
 | windows                                              | scoop, choco, winget |
-+------------------------------------------------------+----------------------+
 | macos                                                | brew, port           |
-+------------------------------------------------------+----------------------+
-| ubuntu, debian, linuxmint, pop, deepin, elementary   | apt, snap, flatpak   |
-| kali, raspbian, aosc, zorin, antix, devuan, bodhi    |                      |
-| lxle, sparky                                         |                      |
-+------------------------------------------------------+----------------------+
-| fedora, redhat, rhel, amzn, ol, almalinux, rocky     | dnf, yum, flatpak    |
-| oubes, centos, qubes, eurolinux                      |                      |
-+------------------------------------------------------+----------------------+
-| arch, manjaro, endeavouros, arcolinux, garuda        | pacman, yay, flatpak |
-| antergos, kaos                                       |                      |
-+------------------------------------------------------+----------------------+
+| ubuntu, debian, linuxmint, pop, deepin, elementary kali, raspbian, aosc, zorin, antix, devuan, bodhi, lxle, sparky | apt, snap, flatpak   |
+| fedora, redhat, rhel, amzn, ol, almalinux, rocky, oubes, centos, qubes, eurolinux | dnf, yum, flatpak |
+| arch, manjaro, endeavouros, arcolinux, garuda, antergos, kaos | pacman, yay, flatpak |
 | alpine, postmarket                                   | apk                  |
-+------------------------------------------------------+----------------------+
 | opensuse, opensuse-leap, opensuse-tumbleweed         | zypper, flatpak      |
-+------------------------------------------------------+----------------------+
 | nixos                                                | nix-env, flatpak     |
-+------------------------------------------------------+----------------------+
 | gentoo, funtoo                                       | emerge, flatpak      |
-+------------------------------------------------------+----------------------+
 | void                                                 | xbps, flatpak        |
-+------------------------------------------------------+----------------------+
 | mageia                                               | urpm, flatpak        |
-+------------------------------------------------------+----------------------+
 | slackware                                            | slackpkg, flatpak    |
-+------------------------------------------------------+----------------------+
 | solus                                                | eopkg, flatpak       |
-+------------------------------------------------------+----------------------+
 | openwrt                                              | opkg, flatpak        |
-+------------------------------------------------------+----------------------+
 | nutyx                                                | cards, flatpak       |
-+------------------------------------------------------+----------------------+
 | crux                                                 | prt-get, flatpak     |
-+------------------------------------------------------+----------------------+
 | freebsd, ghostbsd                                    | pkg                  |
-+------------------------------------------------------+----------------------+
-| android                                              | pkg(termux)          |
-+------------------------------------------------------+----------------------+
+| android                                              | termux               |
 | haiku                                                | pkgman               |
-+------------------------------------------------------+----------------------+
-```
 
 ## Settings
 
