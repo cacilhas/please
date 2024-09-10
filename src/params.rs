@@ -70,12 +70,22 @@ impl Params {
             return self;
         }
 
+        #[cfg(target_os = "windows")]
+        const XDG_CONFIG_HOME: &str = "APPDATA";
+        #[cfg(not(target_os = "windows"))]
+        const XDG_CONFIG_HOME: &str = "XDG_CONFIG_HOME";
+
+        #[cfg(target_os = "windows")]
+        const CONFIG_HOME: &str = "AppData";
+        #[cfg(not(target_os = "windows"))]
+        const CONFIG_HOME: &str = ".config";
+
         let config = match &self.config {
             Some(config) => PathBuf::from(config),
             None => {
-                let config_home = match env::var("XDG_CONFIG_HOME") {
+                let config_home = match env::var(XDG_CONFIG_HOME) {
                     Ok(config_home) => PathBuf::from(config_home),
-                    Err(_) => PathBuf::from(env!["HOME"]).join(".config"),
+                    Err(_) => PathBuf::from(env!["HOME"]).join(CONFIG_HOME),
                 };
                 config_home.join("please.toml")
             }
