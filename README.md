@@ -14,7 +14,7 @@ perform its tasks.
 First install `rustup` using your system package manager, and then run:
 
 ```sh
-rustup toolchain install nightly
+rustup toolchain install nightly-2024-06-25-x86_64-unknown-linux-gnu
 cargo +nightly install please-install
 ```
 
