@@ -18,7 +18,7 @@ cargo +nightly install please-install
 ## Usage
 
 ```sh
-sh> please --help
+sh> please help
 A unified interface package manager for many OSes.
 
 Usage: please [OPTIONS] <COMMAND>
@@ -44,10 +44,10 @@ Options:
   -h, --help             Print help
 ```
 
-You can also call `--help` on subcommand:
+You can also call `help` on subcommand:
 
 ```sh
-sh> please install --help
+sh> please help install
 install package(s)
 
 Usage: please install [PACKAGE]...
