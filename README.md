@@ -168,7 +168,7 @@ This software is licensed under the [BSD-3-Clause License][].
 - [COPYING][]
 
 [BSD-3-Clause License]: https://opensource.org/licenses/BSD-3-Clause
-[COPYING]: https://gihub.com/cacilhas/please-install/blob/master/COPYING
+[COPYING]: https://github.com/cacilhas/please?tab=License-1-ov-file
 [open issues]: https://github.com/cacilhas/please/issues
 [Please Installer]: https://crates.io/crates/please-install
 [TOML]: https://toml.io/en/
