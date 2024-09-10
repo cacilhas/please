@@ -158,7 +158,7 @@ su = true
 
 ## Known bugs
 
-- `--vendor` flag has been ignored [#1](https://github.com/cacilhas/please/issues/1).
+Check [open issues][] for known bugs and features requests.
 
 ## License
 
@@ -169,5 +169,6 @@ This software is licensed under the [BSD-3-Clause License][].
 
 [BSD-3-Clause License]: https://opensource.org/licenses/BSD-3-Clause
 [COPYING]: https://gihub.com/cacilhas/please-install/blob/master/COPYING
+[open issues]: https://github.com/cacilhas/please/issues
 [TOML]: https://toml.io/en/
 [UPT]: https://crates.io/crates/upt
