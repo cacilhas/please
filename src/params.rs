@@ -11,21 +11,28 @@ pub struct Params {
     /// skip settings
     #[arg(short = 'x', long, global = true, action = ArgAction::SetTrue)]
     pub skip_settings: bool,
+
     /// configuration file
     #[arg(short, long, global = true)]
     pub config: Option<String>,
+
     /// dry run (do not actually execute commands)
     #[arg(short, long, global = true, action = ArgAction::SetTrue)]
     pub dry_run: bool,
+
     /// assume yes for all prompts
     #[arg(short, long, global = true, action = ArgAction::SetTrue)]
     pub yes: bool,
+
     #[cfg(not(target_os = "windows"))]
-    #[arg(short, long, global = true, action = ArgAction::SetTrue, help = "run as root (user must be sudoer)")]
+    /// run as root (user must be sudoer)
+    #[arg(short, long, global = true, action = ArgAction::SetTrue)]
     pub su: bool,
+
     /// set the installer command
     #[arg(short, long, global = true)]
     pub vendor: Option<Vendor>,
+
     #[command(subcommand)]
     pub cmd: Cmd,
 }
@@ -39,6 +46,7 @@ pub enum Cmd {
         #[arg(name = "PACKAGE")]
         args: Vec<String>,
     },
+
     /// remove package(s)
     #[command()]
     Remove {
@@ -46,6 +54,7 @@ pub enum Cmd {
         #[arg(name = "PACKAGE")]
         args: Vec<String>,
     },
+
     /// upgrade package(s)
     #[command()]
     Upgrade {
@@ -53,18 +62,22 @@ pub enum Cmd {
         #[arg(name = "PACKAGE")]
         args: Vec<String>,
     },
+
     /// search for package(s)
     #[command()]
     Search {
         /// text to be searched
         #[arg(name = "QUERY")]
         args: String,
+
         /// paginate results
         #[arg(short, long, action = ArgAction::SetTrue)]
         paginate: bool,
+
         #[arg(skip)]
         pager: Option<String>,
     },
+
     /// get info for a package
     #[command()]
     Info {
@@ -72,18 +85,22 @@ pub enum Cmd {
         #[arg(name = "PACKAGE")]
         args: String,
     },
+
     /// update database
     #[command()]
     Update,
+
     /// list installed packages
     #[command()]
     List {
         /// paginate results
         #[arg(short, long, action = ArgAction::SetTrue)]
         paginate: bool,
+
         #[arg(skip)]
         pager: Option<String>,
     },
+
     /// list available vendors
     #[command()]
     ListVendors,
