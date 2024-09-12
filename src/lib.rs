@@ -1,5 +1,3 @@
 mod params;
-mod vendors;
 
-pub use params::*;
-pub use vendors::*;
+pub use params::Params;
