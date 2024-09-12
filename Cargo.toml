@@ -1,6 +1,6 @@
 [package]
 name        = "please-install"
-version     = "0.1.3"
+version     = "0.1.4"
 edition     = "2021"
 authors     = ["Rodrigo “Montegasppα” Cacilhας <montegasppa@cacilhas.info>"]
 description = "A unified interface package manager for many OSes"

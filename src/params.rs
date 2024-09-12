@@ -5,13 +5,8 @@ use toml::Table;
 use crate::{vendors::PlsCommand, Vendor};
 
 
-/// A unified interface package manager for many OSes.
 #[derive(Debug, Parser)]
-#[command(
-    author = "Montegasppα Cacilhας <montegasppa@cacilhas.info>",
-    name = "please",
-    about, version,
-)]
+#[command(about, author, name = "please", version)]
 pub struct Params {
     /// skip settings
     #[arg(short = 'x', long, global = true, action = ArgAction::SetTrue)]
@@ -37,25 +32,29 @@ pub struct Params {
 
 #[derive(Clone, Debug, PartialEq, Subcommand)]
 pub enum Cmd {
-    #[command(about = "install package(s)")]
+    /// install package(s)
+    #[command()]
     Install {
         /// package(s) to be installed
         #[arg(name = "PACKAGE")]
         args: Vec<String>,
     },
-    #[command(about = "remove package(s)")]
+    /// remove package(s)
+    #[command()]
     Remove {
         /// package(s) to be removed
         #[arg(name = "PACKAGE")]
         args: Vec<String>,
     },
-    #[command(about = "upgrade package(s)")]
+    /// upgrade package(s)
+    #[command()]
     Upgrade {
         /// package(s) to be upgraded
         #[arg(name = "PACKAGE")]
         args: Vec<String>,
     },
-    #[command(about = "search for package(s)")]
+    /// search for package(s)
+    #[command()]
     Search {
         /// text to be searched
         #[arg(name = "QUERY")]
@@ -66,15 +65,18 @@ pub enum Cmd {
         #[arg(skip)]
         pager: Option<String>,
     },
-    #[command(about = "get info for a package")]
+    /// get info for a package
+    #[command()]
     Info {
         /// package for which to get info
         #[arg(name = "PACKAGE")]
         args: String,
     },
-    #[command(about = "update database")]
+    /// update database
+    #[command()]
     Update,
-    #[command(about = "list installed packages")]
+    /// list installed packages
+    #[command()]
     List {
         /// paginate results
         #[arg(short, long, action = ArgAction::SetTrue)]
@@ -82,7 +84,8 @@ pub enum Cmd {
         #[arg(skip)]
         pager: Option<String>,
     },
-    #[command(about = "list available vendors")]
+    /// list available vendors
+    #[command()]
     ListVendors,
 }
 
